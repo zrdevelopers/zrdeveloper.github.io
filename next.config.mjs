@@ -2,6 +2,7 @@
 const nextConfig = {
   // basePath: "/",
   output: "export",
+  swcMinify: true,
   images: {
     unoptimized: true,
     loader: 'akamai',

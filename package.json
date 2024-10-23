@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "export": "next export",
+    "start": "npx serve out",
     "deploy": "next build && next export && npx gh-pages -d out",
     "lint": "next lint",
     "lint:fix": "eslint ./ --ext ts,js,tsx,jsx --fix",
