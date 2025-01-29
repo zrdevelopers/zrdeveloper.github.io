@@ -27,6 +27,18 @@
     "id": 3,
     "filter": "a1",
     "category": "Website",
+    "title": "Jasa Tebang Pohon",
+    "fullpage": "/assets/images/featured-projects/fullpage/fullpage-tebangpohon.webp",
+    "banner": "/assets/images/featured-projects/tebangpohon.webp",
+    "carousel_images": ["/assets/images/featured-projects/fullpage/fullpage-tebangpohon.webp"],
+    "description": "Jasa tebang pohon profesional di Jabodetabek.",
+    "launch_website": null,
+    "service": "Pembuatan Website"
+  },
+  {
+    "id": 4,
+    "filter": "a1",
+    "category": "Website",
     "title": "VandZ15",
     "fullpage": "/assets/images/featured-projects/fullpage/fullpage-vandz.webp",
     "banner": "/assets/images/featured-projects/vandz15.webp",

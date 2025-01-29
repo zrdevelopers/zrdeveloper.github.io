@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListFeaturedProjects } from '@/redux/action/featured-projects/creator';
 
@@ -8,12 +8,16 @@ import FeaturedProjectsModal from '@/app/featured-projects/modals';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import { ChevronRight } from 'react-feather';
 
 const Index = () => {
   const featuredProjectsList = useSelector((state) => state.featuredProjects.featuredProjectsList);
   const dispatch = useDispatch();
   // const [groupFeaturedProjectsList, setGroupFeaturedProjectsList] = useState([]);
   const [dataItem, setDataItem] = useState({});
+
+  const [showScrollIcon, setShowScrollIcon] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   const fetchFeaturedProjectsList = async () => {
     dispatch(getListFeaturedProjects());
@@ -39,8 +43,26 @@ const Index = () => {
     setDataItem(item);
   };
 
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      setShowScrollIcon(scrollLeft + clientWidth < scrollWidth - 1);
+    }
+  };
+
+  const fetchHandleScroll = () => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      handleScroll(); // Initialize state
+    }
+
+    return () => container && container.removeEventListener("scroll", handleScroll);
+  }
+
   useEffect(() => {
     fetchFeaturedProjectsList();
+    fetchHandleScroll();
   }, [featuredProjectsList]);
 
   return (
@@ -68,7 +90,7 @@ const Index = () => {
         <div className="container">
           <h2 className="text-center">Proyek Unggulan</h2>
 
-          <div className="project-showcase text-center">
+          <div className="project-showcase text-center position-relative">
             {/* <div className="filter-button-group">
               {groupFeaturedProjectsList.map((item, i) => (
                 <Fragment key={item?.id || i}>
@@ -94,13 +116,17 @@ const Index = () => {
             </div> */}
             {/* <!-- filter-button-group ends --> */}
 
-            <div className="grid d-flex equalHeightWrapper" style={{ overflowX: 'auto' }}>
+            <div
+            ref={scrollContainerRef}
+              className="grid d-flex equalHeightWrapper"
+              style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}
+            >
               {/* More Items can be added. --> */}
               {featuredProjectsList.map((item, i) => (
                 <div
                   key={item?.id || i}
                   className="a1 grid-item col-md-6 col-lg-4 col-11"
-                  data-aos="fade-down"
+                  data-aos="fade-left"
                   data-aos-delay={i * 100}
                 >
                   <a
@@ -127,6 +153,30 @@ const Index = () => {
                 </div>
               ))}
             </div>
+            {/* Right Arrow Icon */}
+            {featuredProjectsList?.length > 3 && showScrollIcon &&
+            <div
+              className="scroll-icon"
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '35%',
+                transform: 'translateY(-35%)',
+                cursor: 'pointer',
+                backgroundColor: '#6952fe',
+                color: '#fff',
+                height: '44px',
+                borderRadius: '8px'
+              }}
+              onClick={() =>
+                document
+                  .querySelector('.equalHeightWrapper')
+                  .scrollBy({ left: 200, behavior: 'smooth' })
+              }
+            >
+              <ChevronRight size={44} />
+            </div>
+            }
             {/* <!-- End of .grid --> */}
             <a
               href="https://bit.ly/Chat-ZRDevelopers"
