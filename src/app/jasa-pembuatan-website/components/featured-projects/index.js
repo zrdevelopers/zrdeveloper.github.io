@@ -1,15 +1,19 @@
 'use client';
 
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListFeaturedProjects } from '@/redux/action/featured-projects/creator';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import IconScroll from '@/components/iconScroll';
 
 const Index = () => {
   const featuredProjectsList = useSelector((state) => state.featuredProjects.featuredProjectsList);
   const dispatch = useDispatch();
+
+  const [showScrollIcon, setShowScrollIcon] = useState(true);
+    const scrollContainerRef = useRef(null);
 
   const fetchFeaturedProjectsList = async () => {
     dispatch(getListFeaturedProjects());
@@ -49,8 +53,9 @@ const Index = () => {
           <p className="text-center mb-0">
             Yuk, intip hasil karya kami dan lihat sendiri kualitasnya:
           </p>
-          <div className="project-showcase text-center">
-            <div className="grid d-flex equalHeightWrapper" style={{ overflowX: 'auto' }}>
+          <div className="project-showcase text-center position-relative">
+            <div ref={scrollContainerRef} className="grid d-flex equalHeightWrapper scrollX" 
+            style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}>
               {/* More Items can be added. --> */}
               {featuredProjectsList.map((item, i) => (
                 <div key={item?.id || i} className="a1 grid-item col-md-6 col-lg-4 col-11">
@@ -76,6 +81,14 @@ const Index = () => {
               ))}
             </div>
             {/* <!-- End of .grid --> */}
+            {/* Right Arrow Icon */}
+            {featuredProjectsList?.length > 3 && showScrollIcon && (
+              <IconScroll
+                scrollContainerRef={scrollContainerRef}
+                setShowScrollIcon={setShowScrollIcon}
+                querySelector=".scrollX"
+              />
+            )}
           </div>
           {/* <!-- End of .template-showcase --> */}
         </div>

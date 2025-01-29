@@ -22,7 +22,9 @@ const Index = (props) => {
   };
 
   const handleResize = () => {
-    setIsLargeScreen(window.innerWidth <= 768);
+    if(setIsLargeScreen) {
+      setIsLargeScreen(window.innerWidth <= 768);
+    }
   };
 
   const feetchHandleResize = () => {
