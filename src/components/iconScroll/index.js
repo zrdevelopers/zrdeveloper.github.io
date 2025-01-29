@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { ChevronRight } from 'react-feather';
 
 const Index = (props) => {
-  const { querySelector, scrollContainerRef, setShowScrollIcon, style } = props;
+  const { querySelector, scrollContainerRef, setShowScrollIcon, style, setIsLargeScreen } = props;
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
@@ -21,8 +21,18 @@ const Index = (props) => {
     return () => container && container.removeEventListener('scroll', handleScroll);
   };
 
+  const handleResize = () => {
+    setIsLargeScreen(window.innerWidth <= 768);
+  };
+
+  const feetchHandleResize = () => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize); // Clean up
+  };
+
   useEffect(() => {
     fetchHandleScroll();
+    feetchHandleResize();
   }, []);
 
   return (

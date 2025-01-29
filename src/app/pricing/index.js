@@ -20,13 +20,6 @@ const Index = () => {
 
   useEffect(() => {
     fetchPricingList();
-
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth <= 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize); // Clean up
   }, []);
 
   return (
@@ -39,7 +32,7 @@ const Index = () => {
         <div
           ref={scrollContainerRef}
           className="flex-row pricing-wrapper d-flex"
-          style={{ overflowX: 'auto' }}
+          style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}
         >
           {pricingList?.plans?.map((item, i) => (
             <div key={item?.id || i} className="col-lg-4 col-md-6 col-11">
@@ -80,12 +73,13 @@ const Index = () => {
           {/* <!-- End of .col-md-4 --> */}
         </div>
         {/* Right Arrow Icon */}
-        {pricingList?.plans?.length > 2 && showScrollIcon && (
+        {pricingList?.plans?.length > 1 && showScrollIcon && (
           <IconScroll
             scrollContainerRef={scrollContainerRef}
             setShowScrollIcon={setShowScrollIcon}
             querySelector=".pricing-wrapper"
             style={{ display: isLargeScreen ? 'block' : 'none' }}
+            setIsLargeScreen={setIsLargeScreen}
           />
         )}
         {/* <!-- End of .pricing-wrapper --> */}

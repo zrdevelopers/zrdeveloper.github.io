@@ -54,7 +54,7 @@ const Index = (props) => {
         <div className="news-slider container position-relative">
           {/* <div className="news-slider common-slider"> */}
           <div
-          ref={scrollContainerRef}
+            ref={scrollContainerRef}
             className="carousel-container equalHeightWrapper d-flex"
             style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}
           >
@@ -111,9 +111,13 @@ const Index = (props) => {
               </div>
             )}
           </div>
-          {latestNewsList?.length > 3 && showScrollIcon &&
-            <IconScroll scrollContainerRef={scrollContainerRef} setShowScrollIcon={setShowScrollIcon} querySelector='.carousel-container' />
-          }
+          {latestNewsList?.length > 3 && showScrollIcon && (
+            <IconScroll
+              scrollContainerRef={scrollContainerRef}
+              setShowScrollIcon={setShowScrollIcon}
+              querySelector=".carousel-container"
+            />
+          )}
           {/* <!-- End of .carousel-container --> */}
         </div>
         {/* <!-- End of .news-slider --> */}
