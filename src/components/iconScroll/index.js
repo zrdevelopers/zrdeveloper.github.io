@@ -22,7 +22,7 @@ const Index = (props) => {
   };
 
   const handleResize = () => {
-    if(setIsLargeScreen) {
+    if (setIsLargeScreen) {
       setIsLargeScreen(window.innerWidth <= 768);
     }
   };

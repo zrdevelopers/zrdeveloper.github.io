@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment, useEffect, useState, useRef} from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListFeaturedProjects } from '@/redux/action/featured-projects/creator';
 
@@ -13,7 +13,7 @@ const Index = () => {
   const dispatch = useDispatch();
 
   const [showScrollIcon, setShowScrollIcon] = useState(true);
-    const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef(null);
 
   const fetchFeaturedProjectsList = async () => {
     dispatch(getListFeaturedProjects());
@@ -53,42 +53,48 @@ const Index = () => {
           <p className="text-center mb-0">
             Yuk, intip hasil karya kami dan lihat sendiri kualitasnya:
           </p>
-          <div className="project-showcase text-center position-relative">
-            <div ref={scrollContainerRef} className="grid d-flex equalHeightWrapper scrollX" 
-            style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}>
-              {/* More Items can be added. --> */}
-              {featuredProjectsList.map((item, i) => (
-                <div key={item?.id || i} className="a1 grid-item col-md-6 col-lg-4 col-11">
-                  <div className="featured-content-block content-block">
-                    <div
-                      className="img-container"
-                      style={{ maxHeight: '285px', overflowY: 'auto' }}
-                    >
-                      <LazyLoadImage
-                        effect="blur"
-                        alt="Jasa Pembuatan Website | ZRDevelopers"
-                        src={item?.fullpage}
-                        className="img-fluid"
-                      />
+          <div className="project-showcase text-center ">
+            <div className="position-relative">
+              <div
+                ref={scrollContainerRef}
+                className="grid d-flex equalHeightWrapper scrollX"
+                style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}
+              >
+                {/* More Items can be added. --> */}
+                {featuredProjectsList.map((item, i) => (
+                  <div key={item?.id || i} className="a1 grid-item col-md-6 col-lg-4 col-11">
+                    <div className="featured-content-block content-block">
+                      <div
+                        className="img-container"
+                        style={{ maxHeight: '285px', overflowY: 'auto' }}
+                      >
+                        <LazyLoadImage
+                          effect="blur"
+                          alt="Jasa Pembuatan Website | ZRDevelopers"
+                          src={item?.fullpage}
+                          className="img-fluid"
+                        />
+                      </div>
+                      {/* <!-- End of .img-container --> */}
+                      <h5 className="equalHeight">
+                        <span className="content-block__sub-title">{item?.service}</span>
+                        {item.title}
+                      </h5>
                     </div>
-                    {/* <!-- End of .img-container --> */}
-                    <h5 className="equalHeight">
-                      <span className="content-block__sub-title">{item?.service}</span>
-                      {item.title}
-                    </h5>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              {/* <!-- End of .grid --> */}
+              {/* Right Arrow Icon */}
+              {featuredProjectsList?.length > 3 && showScrollIcon && (
+                <IconScroll
+                  scrollContainerRef={scrollContainerRef}
+                  setShowScrollIcon={setShowScrollIcon}
+                  querySelector=".equalHeightWrapper"
+                  style={{ top: '45%' }}
+                />
+              )}
             </div>
-            {/* <!-- End of .grid --> */}
-            {/* Right Arrow Icon */}
-            {featuredProjectsList?.length > 3 && showScrollIcon && (
-              <IconScroll
-                scrollContainerRef={scrollContainerRef}
-                setShowScrollIcon={setShowScrollIcon}
-                querySelector=".scrollX"
-              />
-            )}
           </div>
           {/* <!-- End of .template-showcase --> */}
         </div>
