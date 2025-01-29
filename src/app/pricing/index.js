@@ -1,12 +1,18 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListPricing } from '@/redux/action/pricing/creator';
+
+import IconScroll from '@/components/iconScroll';
 
 const Index = () => {
   const pricingList = useSelector((state) => state.pricing.pricingList);
   const dispatch = useDispatch();
+
+  const [showScrollIcon, setShowScrollIcon] = useState(true);
+  const scrollContainerRef = useRef(null);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth <= 768);
 
   const fetchPricingList = async () => {
     dispatch(getListPricing());
@@ -14,16 +20,27 @@ const Index = () => {
 
   useEffect(() => {
     fetchPricingList();
+
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize); // Clean up
   }, []);
 
   return (
     <section className="pricing section-padding" id="pricing">
-      <div className="container">
+      <div className="container position-relative">
         <h2 className="text-center">Harga</h2>
         {pricingList.subtitle && (
           <p className="section-subheading text-center">{pricingList.subtitle}</p>
         )}
-        <div className="flex-row pricing-wrapper d-flex" style={{ overflowX: 'auto' }}>
+        <div
+          ref={scrollContainerRef}
+          className="flex-row pricing-wrapper d-flex"
+          style={{ overflowX: 'auto' }}
+        >
           {pricingList?.plans?.map((item, i) => (
             <div key={item?.id || i} className="col-lg-4 col-md-6 col-11">
               <div className="pricing-block text-center content-block">
@@ -62,6 +79,15 @@ const Index = () => {
           ))}
           {/* <!-- End of .col-md-4 --> */}
         </div>
+        {/* Right Arrow Icon */}
+        {pricingList?.plans?.length > 2 && showScrollIcon && (
+          <IconScroll
+            scrollContainerRef={scrollContainerRef}
+            setShowScrollIcon={setShowScrollIcon}
+            querySelector=".pricing-wrapper"
+            style={{ display: isLargeScreen ? 'block' : 'none' }}
+          />
+        )}
         {/* <!-- End of .pricing-wrapper --> */}
       </div>
       {/* <!-- End of .container --> */}

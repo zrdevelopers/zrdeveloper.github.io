@@ -1,7 +1,7 @@
 'use client';
 
 import './styles.scss';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getListLatestNews } from '@/redux/action/latest-news/creator';
 
@@ -11,6 +11,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 import Link from 'next/link';
+import IconScroll from '@/components/iconScroll';
 
 const Index = (props) => {
   const { slug } = props;
@@ -18,6 +19,9 @@ const Index = (props) => {
   const dispatch = useDispatch();
   const [dataItem, setDataItem] = useState({});
   const [showModal, setShowModal] = useState(false);
+
+  const [showScrollIcon, setShowScrollIcon] = useState(true);
+  const scrollContainerRef = useRef(null);
 
   const fetchLatestNewsList = async () => {
     dispatch(getListLatestNews());
@@ -47,11 +51,12 @@ const Index = (props) => {
         </div>
         {/* <!-- End of .container --> */}
 
-        <div className="news-slider container">
+        <div className="news-slider container position-relative">
           {/* <div className="news-slider common-slider"> */}
           <div
+          ref={scrollContainerRef}
             className="carousel-container equalHeightWrapper d-flex"
-            style={{ overflowX: 'auto' }}
+            style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}
           >
             {latestNewsList?.slice(0, 7)?.map((item, i) => (
               <div
@@ -106,6 +111,9 @@ const Index = (props) => {
               </div>
             )}
           </div>
+          {latestNewsList?.length > 3 && showScrollIcon &&
+            <IconScroll scrollContainerRef={scrollContainerRef} setShowScrollIcon={setShowScrollIcon} querySelector='.carousel-container' />
+          }
           {/* <!-- End of .carousel-container --> */}
         </div>
         {/* <!-- End of .news-slider --> */}

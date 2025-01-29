@@ -8,7 +8,8 @@ import FeaturedProjectsModal from '@/app/featured-projects/modals';
 
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { ChevronRight } from 'react-feather';
+
+import IconScroll from '@/components/iconScroll';
 
 const Index = () => {
   const featuredProjectsList = useSelector((state) => state.featuredProjects.featuredProjectsList);
@@ -43,26 +44,8 @@ const Index = () => {
     setDataItem(item);
   };
 
-  const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-      setShowScrollIcon(scrollLeft + clientWidth < scrollWidth - 1);
-    }
-  };
-
-  const fetchHandleScroll = () => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-      handleScroll(); // Initialize state
-    }
-
-    return () => container && container.removeEventListener("scroll", handleScroll);
-  }
-
   useEffect(() => {
     fetchFeaturedProjectsList();
-    fetchHandleScroll();
   }, [featuredProjectsList]);
 
   return (
@@ -117,7 +100,7 @@ const Index = () => {
             {/* <!-- filter-button-group ends --> */}
 
             <div
-            ref={scrollContainerRef}
+              ref={scrollContainerRef}
               className="grid d-flex equalHeightWrapper"
               style={{ overflowX: 'auto', scrollBehavior: 'smooth' }}
             >
@@ -154,29 +137,13 @@ const Index = () => {
               ))}
             </div>
             {/* Right Arrow Icon */}
-            {featuredProjectsList?.length > 3 && showScrollIcon &&
-            <div
-              className="scroll-icon"
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '35%',
-                transform: 'translateY(-35%)',
-                cursor: 'pointer',
-                backgroundColor: '#6952fe',
-                color: '#fff',
-                height: '44px',
-                borderRadius: '8px'
-              }}
-              onClick={() =>
-                document
-                  .querySelector('.equalHeightWrapper')
-                  .scrollBy({ left: 200, behavior: 'smooth' })
-              }
-            >
-              <ChevronRight size={44} />
-            </div>
-            }
+            {featuredProjectsList?.length > 3 && showScrollIcon && (
+              <IconScroll
+                scrollContainerRef={scrollContainerRef}
+                setShowScrollIcon={setShowScrollIcon}
+                querySelector=".equalHeightWrapper"
+              />
+            )}
             {/* <!-- End of .grid --> */}
             <a
               href="https://bit.ly/Chat-ZRDevelopers"
